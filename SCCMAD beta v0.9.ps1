@@ -121,7 +121,7 @@ Function Delete-CMDevice{
     $Result = [System.Windows.MessageBox]::Show($MessageBody,$MessageTitle,$ButtonType,$MessageIcon)
     Write-Host "Your choice is $Result"
         if($Result -eq "Yes"){
-            Remove-CMDevice -DeviceName $data
+            Remove-CMDevice -DeviceName $data -force -ErrorAction Stop
             $WPFtextBlock.Text = "Last deleted: '$data'. Good job!"
         }
         else{
@@ -163,6 +163,7 @@ $WPFOK.Add_Click({
                     Get-ADDevice -computername $name | % {$WPFGrid.AddChild($_)}
                 }
                 if($scv){
+                    #Adds break between AD devices and SCCM devices
                     $WPFGrid.AddChild($meme)
                     foreach($name in $SCarr){
                         Get-SCCMDevice -computername $name | % {$WPFGrid.AddChild($_)}
